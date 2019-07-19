@@ -1,0 +1,8 @@
+<h1>Sign In</h1>
+<form action=do_sign_in method=post>
+{% csrf_token %}
+{{ sign_in_form }}
+<input type=submit value="Log in"/>
+</form>
+<a href=sign_up>Create new account</a>
+<a href=index>Back to the top</a>

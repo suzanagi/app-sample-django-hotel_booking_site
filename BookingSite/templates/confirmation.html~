@@ -1,0 +1,7 @@
+{% extends extend_template %}
+
+{% block title %}Booking Confirmation{% endblock %}
+
+{% block content %}
+
+{% endblock %}

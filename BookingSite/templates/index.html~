@@ -1,0 +1,10 @@
+{% extends extend_template %}
+
+{% block title %}Index Page{% endblock %}
+
+{% block content %}
+<form action=list_of_result method=post>
+{{search_form}}
+<input type=submit value="Search"/>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends extend_template %}
+{% block title %}
+Search Result for {{type}} room in {{city}} 
+{% endblock %}
+{% block content %}
+<p>Date: {{date|date:"M. d, Y"}}</p>
+<h1>Search Results</h1>
+<ul>
+{% for r in room %}
+    <li>
+      {{ r.hotel }} - {{ type }} : {{ r.price }}
+      <form action=confirmation method=post>
+	{% csrf_token %}
+	<input type="hidden" value={{ r.id }} name="room"/>
+	<input type="hidden" value={{ date|date:"m.d.Y" }} name="date"/>
+	<input type=submit value="Book Now"/>
+      </form>
+    </li>
+{% empty %}
+    <p>Sorry, we couldn't find any rooms...</p>
+    <p>Why don't you Change the Date/Room type?</p>
+{% endfor %}
+</ul>
+<a href="{% url 'index' %}">Make Changes</a>
+{% endblock %}

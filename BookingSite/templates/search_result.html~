@@ -1,0 +1,16 @@
+{% extends extend_template %}
+{% block title %}
+Search Result for {{type}} room in {{city}} 
+{% endblock %}
+{% block content %}
+<p>Date: {{date|date:"M. d, Y"}}</p>
+<h1>Search Results</h1>
+<ul>
+{% for room in room %}
+    <li>{{ room.hotel }} - {{ type }} : {{ room.price }}</li>
+{% empty %}
+    <li>Sorry, we couldn't find any rooms...</li>
+{% endfor %}
+</ul>
+<a href="{% url 'index' %}">Make Changes</a>
+{% endblock %}

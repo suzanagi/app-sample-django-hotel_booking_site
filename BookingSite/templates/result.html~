@@ -1,0 +1,7 @@
+{% extends extend_template %}
+
+{% block title %}Booking Result{% endblock %}
+
+{% block content %}
+
+{% endblock %}
