@@ -6,14 +6,15 @@
 <p>{{ room.hotel }}</p>
 <p>{{ room.hotel.city }}</p>
 <p>{{ type }}</p>
-<p>Date: {{ date|date:"M. d, Y" }}</p>
+<p>Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
 <p>Price: {{ room.price }}</p>
 {% if user %}
 <p>Please check carefully and confirm</p>
 <form action=do_confirmation method=post>
 {% csrf_token %}
 <input type="hidden" value={{ room.id }} name="room"/>
-<input type="hidden" value={{ date|date:"m.d.Y" }} name="date"/>
+<input type="hidden" value={{ check_in|date:"m.d.Y" }} name="check_in"/>
+<input type="hidden" value={{ check_out|date:"m.d.Y" }} name="check_out"/>
 <input type=submit value="Confirm"/>
 </form>
 {% else %}
@@ -21,5 +22,13 @@
 <p>or</p>
 <a href=sign_up>Create a new account</a>
 {% endif %}
-<a href="{{ request.META.HTTP_BEFERER }}">Back to the List</a>
+<form action=list_of_result method=post>
+{% csrf_token %}
+{{ search_form.city.as_hidden }}
+{{ search_form.type.as_hidden }}
+{{ search_form.check_in_date.as_hidden }}
+{{ search_form.check_out_date.as_hidden }}
+<input type=submit value="Back to the Search"/>
+</form>
+<!-- <a href="{{ request.META.HTTP_REFERER }}">Back to the Search</a> -->
 {% endblock %}

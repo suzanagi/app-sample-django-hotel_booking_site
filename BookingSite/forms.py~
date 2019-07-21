@@ -1,5 +1,5 @@
 from django import forms
-from BookingSite.models import ROOM_TYPES
+from BookingSite.models import ROOM_TYPES, Reservation
 
 class SearchForm(forms.Form):
     city = forms.ChoiceField(label='Location')

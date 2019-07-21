@@ -23,6 +23,30 @@ def user_object(request):
         user = None
     return user
 
+def search_room(search_date, search_type, search_city):
+    # Store the rooms which are reserved already, on the searching date
+    booked_rooms = Reservation.objects.filter(date=search_date).values_list('room')
+    # Store the hotels which are located in the searching city
+    hotels_in_location = Hotel.objects.filter(city=search_city)
+        
+    # Summarize the rooms which have the searching type, on the location, and excluding booked rooms, in the order cheaper price comes first
+    r_list = Room.objects.filter(type=search_type).filter(hotel_id__in=hotels_in_location).exclude(id__in=booked_rooms).order_by('price')
+
+    # List of hotels of the rooms which has the certain type and location
+    hotels_in_r_list = r_list.values_list('hotel', flat=True).order_by('hotel').distinct()
+
+    # Eliminate the duplicate in the element of result rooms
+    room_result = Room.objects.none()
+    room_result |= [r_list.filter(hotel_id=id).first() for id in hotels_in_r_list]
+    return room_result
+
+def make_reservation(room, date, user):
+    if Reservation.objects.filter(room=room).filter(date=date).exists():
+        return None
+    else:
+        booking = Reservation(room=room, date=date, user=user)
+        return booking
+
 def index(request):
     user = user_object(request)
     cities = City.objects.all()
@@ -41,69 +65,44 @@ def list_of_result(request):
     # User Name who is logging in
     user = user_object(request)
     # Date searching 
-    '''
-    search_date_str = "04.07.2019"
-    search_date_str = search_form.cleaned_data['date']
-    search_date = datetime.datetime.strptime(search_date_str, '%Y-%m-%d')
-    '''
     search_date = search_form.cleaned_data['date']
     # Room type searching
     search_type = search_form.cleaned_data['type']
     # City searching
     search_city = City.objects.get(name=search_form.cleaned_data['city'])
-
-    # Store the rooms which are reserved already, on the searching date
-    booked_rooms = Reservation.objects.filter(date=search_date).values_list('room')
-    # Store the hotels which are located in the searching city
-    hotels_in_location = Hotel.objects.filter(city=search_city)
-        
-    # Summarize the rooms which have the searching type, on the location, and excluding booked rooms 
-    r_list = Room.objects.filter(type=search_type).filter(hotel_id__in=hotels_in_location).exclude(id__in=booked_rooms).order_by('-price')
-
-    # List of hotels of the rooms which has the certain type and location
-    hotels_in_r_list = r_list.values_list('hotel', flat=True).order_by('hotel').distinct()
-
-    # Eliminate the duplicate in the element of result rooms
-    room_result = Room.objects.none()
-    room_result |= [r_list.filter(hotel_id=id).first() for id in hotels_in_r_list]
-
-    print("Rooms detected:")
-    for r in room_result:
-        print("{}".format(r.hotel))
+    # Obtain the applicable rooms 
+    room_result = search_room(search_date, search_type, search_city)
 
     return render(request, 'search_result.html', {'user': user, 'date': search_date, 'type': dict(ROOM_TYPES).get(search_type), 'city': search_city, 'room': room_result, 'extend_template': template_for_extends(user)})
 
 def confirmation(request):
-    return HttpResponse("Confirmation")
+    user = user_object(request)
+    room = Room.objects.get(id=request.POST.get('room', None))
+    date = datetime.datetime.strptime(request.POST.get('date', None), "%m.%d.%Y").date()
+    
+    return render(request, 'confirmation.html', {'user': user, 'date': date, 'type': dict(ROOM_TYPES).get(room.type), 'room': room, 'extend_template': template_for_extends(user)})
 
 def do_confirmation(request):
-    return HttpResponse("do Confirmation")
-
-def result(request):
-    return HttpResponse("Result Page")
+    user = user_object(request)
+    try:
+        if not user:
+            raise RuntimeError("Connection timed out. Please log in again")
+    except RuntimeError as e:
+        return HttpResponse(str(e) + "<p><a href=index>Go back to main page</a></p>")
+    room = Room.objects.filter(id=request.POST.get('room', None)).get()
+    date = datetime.datetime.strptime(request.POST.get('date', None), "%m.%d.%Y").date()
+    booking = make_reservation(room, date, user)
+    if not booking:
+        return render(request, 'result.html', {'user': user, 'proceed': False, 'extend_template': template_for_extends(user)})
+    else:
+        booking.save()
+        return render(request, 'result.html', {'user': user, 'booking': booking, 'type': dict(ROOM_TYPES).get(room.type), 'proceed': True, 'extend_template': template_for_extends(user)})
 
 def sign_in(request):
     return render(request, 'sign_in.html', {'sign_in_form': SignInForm()})
 
 def do_sign_in(request):
-    
     sign_in_form=SignInForm(request.POST)
-    '''
-    try:
-        if not sign_in_form.is_valid():
-            raise RuntimeError("Error: " + str(sign_in_form.errors))
-        useremail = sign_in_form.cleaned_data['email']
-        userpassword = sign_in_form.cleaned_data['password']
-        user = authenticate(request, email=useremail, password=userpassword)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            raise RuntimeError("Wrong email address or password")
-    except RuntimeError as e:
-        return HttpResponse(str(e) + "<p><a href=sign_in>Go back</a></p>")
-    '''
-    
     try:
         if not sign_in_form.is_valid():
             raise RuntimeError("Error: " + str(sign_in_form.errors))
@@ -113,8 +112,6 @@ def do_sign_in(request):
             print("User Auth Failed: Wrong address or password.")
             raise RuntimeError("Wrong email address or password.")
         request.session['authorized_user_id'] = u[0].id
-        
-
     except RuntimeError as e:
         return HttpResponse(str(e) + "<p><a href=sign_in>Go back</a></p>")
     return redirect('index')
@@ -147,14 +144,3 @@ def do_sign_up(request):
         return HttpResponse(str(e) + "<p><a href=sign_up>Go back</a></p>")
     
     return redirect('index')
-
-'''
-class SearchListView(ListView):
-    model = Room
-    paginate_by = 100
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-#        context['now'] = timezone.now()
-        return context
-'''

@@ -3,5 +3,23 @@
 {% block title %}Booking Confirmation{% endblock %}
 
 {% block content %}
-
+<p>{{ room.hotel }}</p>
+<p>{{ room.hotel.city }}</p>
+<p>{{ type }}</p>
+<p>Date: {{ date|date:"M. d, Y" }}</p>
+<p>Price: {{ room.price }}</p>
+{% if user %}
+<p>Please check carefully and confirm</p>
+<form action=do_confirmation method=post>
+{% csrf_token %}
+<input type="hidden" value={{ room.id }} name="room"/>
+<input type="hidden" value={{ date|date:"m.d.Y" }} name="date"/>
+<input type=submit value="Confirm"/>
+</form>
+{% else %}
+<p><a href=sign_in>Sign in</a> to make a reservation!</p>
+<p>or</p>
+<a href=sign_up>Create a new account</a>
+{% endif %}
+<a href="{{ request.META.HTTP_BEFERER }}">Back to the List</a>
 {% endblock %}

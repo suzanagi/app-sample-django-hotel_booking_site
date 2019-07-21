@@ -6,10 +6,19 @@ Search Result for {{type}} room in {{city}}
 <p>Date: {{date|date:"M. d, Y"}}</p>
 <h1>Search Results</h1>
 <ul>
-{% for room in room %}
-    <li>{{ room.hotel }} - {{ type }} : {{ room.price }}</li>
+{% for r in room %}
+    <li>
+      {{ r.hotel }} - {{ type }} : {{ r.price }}
+      <form action=confirmation method=post>
+	{% csrf_token %}
+	<input type="hidden" value={{ r.id }} name="room"/>
+	<input type="hidden" value={{ date|date:"m.d.Y" }} name="date"/>
+	<input type=submit value="Book Now"/>
+      </form>
+    </li>
 {% empty %}
-    <li>Sorry, we couldn't find any rooms...</li>
+    <p>Sorry, we couldn't find any rooms...</p>
+    <p>Why don't you Change the Date/Room type?</p>
 {% endfor %}
 </ul>
 <a href="{% url 'index' %}">Make Changes</a>

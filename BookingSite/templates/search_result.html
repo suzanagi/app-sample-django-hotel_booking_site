@@ -3,16 +3,17 @@
 Search Result for {{type}} room in {{city}} 
 {% endblock %}
 {% block content %}
-<p>Date: {{date|date:"M. d, Y"}}</p>
+<p>Date: {{check_in|date:"M. d, Y"}} - {{check_out|date:"M. d, Y"}}</p>
 <h1>Search Results</h1>
 <ul>
 {% for r in room %}
     <li>
-      {{ r.hotel }} - {{ type }} : {{ r.price }}
+      {{ r.hotel }} - {{ type }} : USD {{ r.price }} / night
       <form action=confirmation method=post>
 	{% csrf_token %}
 	<input type="hidden" value={{ r.id }} name="room"/>
-	<input type="hidden" value={{ date|date:"m.d.Y" }} name="date"/>
+	<input type="hidden" value={{ check_in|date:"m.d.Y" }} name="check_in"/>
+	<input type="hidden" value={{ check_out|date:"m.d.Y" }} name="check_out"/>
 	<input type=submit value="Book Now"/>
       </form>
     </li>

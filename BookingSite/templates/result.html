@@ -4,11 +4,11 @@
 
 {% block content %}
 {% if proceed %}
-<P>{{ booking.room.hotel }}</p>
-<p>{{ booking.room.hotel.city }}</p>
+<P>{{ hotel }}</p>
+<p>{{ city }}</p>
 <p>{{ type }}</p>
-<p>Date: {{ booking.date|date:"M. d, Y" }}</p>
-<p>Price: {{ booking.room.price }}</p>
+<p>Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
+<p>Price: USD {{ price }} in total</p>
 <p>Your reservation has been successfully proceeded!</p>
 <p>Thank you for booking :)</p>
 {% else %}
