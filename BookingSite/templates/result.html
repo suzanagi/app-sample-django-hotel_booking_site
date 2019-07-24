@@ -4,16 +4,21 @@
 
 {% block content %}
 {% if proceed %}
-<P>{{ hotel }}</p>
-<p>{{ city }}</p>
-<p>{{ type }}</p>
-<p>Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
-<p>Price: USD {{ price }} in total</p>
+<div style="width: 280px;">
+    <h4>{{ hotel }}</h4>
+    <div class="row">
+        <p class="col-sm-6" style="float: right; padding-right: 10px; text-align: right;">{{ city }}</p>
+        <p class="col-sm-6" style="float: left; padding-left: 10px; text-align: left;">{{ type }} Room</p>
+    </div>
+    <p style="text-align: left;">Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
+    <p style="text-align: left;">Price: <b>USD {{ price }}</b> in total</p>
+</div>
 <p>Your reservation has been successfully proceeded!</p>
 <p>Thank you for booking :)</p>
+
 {% else %}
 <p>Sorry, we couldn't complete your reservation.</p>
 <p>Please try it again :(</p>
 {% endif %}
-<a href=index>Back to the top</a>
+<a href=index>< Back to the top</a>
 {% endblock %}

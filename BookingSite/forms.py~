@@ -4,7 +4,8 @@ from BookingSite.models import ROOM_TYPES, Reservation
 class SearchForm(forms.Form):
     city = forms.ChoiceField(label='Location')
     type = forms.ChoiceField(label='Room Type')
-    date = forms.DateField(label='Date')
+    check_in_date = forms.DateField(label='Check in')
+    check_out_date = forms.DateField(label='Check out')
     
     def __init__(self, *args, **kwargs):
         cities = kwargs.pop('cities')

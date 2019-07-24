@@ -2,10 +2,60 @@
 
 {% block title %}Index Page{% endblock %}
 
+{% block header %}
+{{ search_form.media }}
+{% endblock %}
+
+
 {% block content %}
 <form action=list_of_result method=post>
-{% csrf_token %}
-{{search_form}}
-<input type=submit value="Search"/>
+  {% csrf_token %}
+<!--
+  {% load static %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm"></div>
+      <div class="col-sm"><img src="{% static 'icon_location.png' %}" style="width:25px;" align="right"></div>
+      <div class="col-sm">{{ search_form.city }}</div>
+      <div class="col-sm"></div>
+    </div>
+    <div class="row">
+      
+    </div>
+    <div class="row">
+      
+    </div>
+    <div class="row">
+      
+    </div>
+-->
+<table style="margin-top: 20px;">
+    <tr>
+      <td style="padding: 15px;"><img src="{% static 'icon_location.png' %}" style="width:25px;"></td>
+      <td style="padding: 15px;">{{ search_form.city }} </td>
+    </tr>
+    <tr>
+      <td style="padding: 15px;"><img src="{% static 'icon_bed.png' %}" style="width:25px;"></td>
+      <td style="padding: 15px;">{{ search_form.type }} </td>
+    </tr>
+    <tr>
+      <td style="padding: 15px; padding-bottom: 0px;"><img src="{% static 'icon_calendar.png' %}" style="width:25px;"></td>
+      <td style="padding: 15px; padding-bottom: 0px;">Check in</td>
+    </tr>
+    <tr>
+      <td style="padding: 15px;"></td>
+      <td style="padding: 15px;">{{ search_form.check_in_date }} </td>
+    </tr>
+    <tr>
+      <td style="padding: 15px; padding-bottom: 0px;"><img src="{% static 'icon_calendar.png' %}" style="width:25px;"></td>
+      <td style="padding: 15px; padding-bottom: 0px">Check out</td>
+    </tr>
+    <tr>
+      <td style="padding: 15px;"></td>
+      <td style="padding: 15px;">{{ search_form.check_out_date }}</td>
+    </tr>
+</table>
+    <input type=submit value="Search"/>
+<!--  </div> -->
 </form>
 {% endblock %}

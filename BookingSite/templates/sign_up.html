@@ -1,8 +1,28 @@
-<h1>Sign Up</h1>
-<form action=do_sign_up method=post>
-{{ sign_up_form}}
-{% csrf_token %}
-<input type=submit value="Sign up"/>
-</form>
-<a href=sign_in>I have an account already</a>
-<a href=index>Back to the top</a>
+<html>
+<head>
+  <title>Sign up</title>
+  {% load bootstrap4 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript jquery='full' %}
+</head>
+<body>
+  <div class="container">
+    <center>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iMzAiIGhlaWdodD0iMzAiCnZpZXdCb3g9IjAgMCAzMCAzMCIKc3R5bGU9IiBmaWxsOiMwMDAwMDA7Ij4gICAgPHBhdGggZD0iTTE1LDNDOC4zNzMsMywzLDguMzczLDMsMTVjMCw2LjYyNyw1LjM3MywxMiwxMiwxMnMxMi01LjM3MywxMi0xMkMyNyw4LjM3MywyMS42MjcsMywxNSwzeiBNOCwyMi4xNDEgYzEuMTY3LTMuNSw0LjY2Ny0yLjEzNCw1LjI1LTQuMDN2LTEuMjY0Yy0wLjI2Mi0wLjE0MS0xLjAxMy0xLjEwOS0xLjA5Mi0xLjg2NWMtMC4yMDctMC4wMTgtMC41MzEtMC4yMjMtMC42MjctMS4wMzQgYy0wLjA1MS0wLjQzNSwwLjE1My0wLjY4LDAuMjc2LTAuNzU3YzAsMC0wLjMwOC0wLjcwMi0wLjMwOC0xLjM5OUMxMS41LDkuNzIsMTIuNTI2LDgsMTUsOGMxLjMzNiwwLDEuNzUsMC45NDcsMS43NSwwLjk0NyBjMS4xOTQsMCwxLjc1LDEuMzA5LDEuNzUsMi44NDRjMCwwLjc2NS0wLjMwOCwxLjM5OS0wLjMwOCwxLjM5OWMwLjEyNCwwLjA3NywwLjMyOCwwLjMyMiwwLjI3NywwLjc1NyBjLTAuMDk2LDAuODExLTAuNDIsMS4wMTYtMC42MjcsMS4wMzRjLTAuMDc5LDAuNzU2LTAuODI5LDEuNzI0LTEuMDkyLDEuODY1djEuMjY0YzAuNTgzLDEuODk3LDQuMDgzLDAuNTMxLDUuMjUsNC4wMzEgYzAsMC0yLjYxOCwyLjg1OS03LDIuODU5QzEwLjU5MywyNSw4LDIyLjE0MSw4LDIyLjE0MXoiPjwvcGF0aD48L3N2Zz4=" style="width:70px">
+      <h2>Sign Up</h2>
+      <form action=do_sign_up method=post>
+	{% csrf_token %}
+	{% for field in sign_up_form %}
+	<div class="form-group">
+	  {{ field }}
+	</div>
+	{% endfor %}
+	<input type=submit value="Sign up" class="btn btn-primary"/>
+      </form>
+      <div class="d-flex flex-column">
+	<a href=sign_in>I have an account already</a>
+	<a href=index>< Back to the top</a>
+      </div>
+    </center>
+  </div>
+</body>
