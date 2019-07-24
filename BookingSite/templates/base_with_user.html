@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block current_user %}
-    <p>User: {{user.f_name}} {{user.l_name}}</p>
-    <a href=do_sign_out>Sign Out</a>
+<li class="nav-item dropdown">
+    {% load static %}
+    <a class="nav-link dropdown-toggle text-white bg-dark" data-toggle="dropdown"><img src="{% static 'icon_user_white.png' %}" style="width:25px;"> {{user.f_name}} {{user.l_name}}</a>
+    <div class="dropdown-menu">
+      <a href=do_sign_out class="dropdown-item text-center">Sign Out</a>
+    </div>
+</li>
 {% endblock %}

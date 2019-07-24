@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block current_user %}
-    <a href=sign_in>Sign in</a>
+<li class="nav-item">
+    {% load static %}
+    <a href=sign_in class="nav-link text-white"><img src="{% static 'icon_user_white.png' %}" style="width:25px;"> Sign in</a>
+</li>
 {% endblock %}

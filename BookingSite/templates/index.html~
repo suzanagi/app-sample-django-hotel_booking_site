@@ -2,9 +2,17 @@
 
 {% block title %}Index Page{% endblock %}
 
+{% block header %}
+{{ search_form.media }}
+{% endblock %}
+
+
 {% block content %}
 <form action=list_of_result method=post>
-{{search_form}}
+  {% csrf_token %}
+  <table>
+    {{ search_form.as_table }}
+  </table>
 <input type=submit value="Search"/>
 </form>
 {% endblock %}

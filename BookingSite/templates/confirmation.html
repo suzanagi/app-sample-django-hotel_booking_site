@@ -3,32 +3,38 @@
 {% block title %}Booking Confirmation{% endblock %}
 
 {% block content %}
-<p>{{ room.hotel }}</p>
-<p>{{ room.hotel.city }}</p>
-<p>{{ type }}</p>
-<p>Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
-<p>Price: {{ room.price }}</p>
-{% if user %}
-<p>Please check carefully and confirm</p>
-<form action=do_confirmation method=post>
-{% csrf_token %}
-<input type="hidden" value={{ room.id }} name="room"/>
-<input type="hidden" value={{ check_in|date:"m.d.Y" }} name="check_in"/>
-<input type="hidden" value={{ check_out|date:"m.d.Y" }} name="check_out"/>
-<input type=submit value="Confirm"/>
-</form>
-{% else %}
-<p><a href=sign_in>Sign in</a> to make a reservation!</p>
-<p>or</p>
-<a href=sign_up>Create a new account</a>
-{% endif %}
-<form action=list_of_result method=post>
-{% csrf_token %}
-{{ search_form.city.as_hidden }}
-{{ search_form.type.as_hidden }}
-{{ search_form.check_in_date.as_hidden }}
-{{ search_form.check_out_date.as_hidden }}
-<input type=submit value="Back to the Search"/>
-</form>
+<div style="width: 280px;">
+    <h4>{{ room.hotel }}</h4>
+    <div class="row">
+        <p class="col-sm-6" style="float: right; padding-right: 10px; text-align: right;">{{ room.hotel.city }}</p>
+        <p class="col-sm-6" style="float: left; padding-left: 10px; text-align: left;">{{ type }}</p>
+    </div>
+
+    <p style="text-align: left;">Date: {{ check_in|date:"M. d, Y" }} - {{ check_out|date:"M. d, Y" }}</p>
+    <p style="text-align: left;">Price: {{ room.price }}</p>
+    {% if user %}
+        <p>Please check carefully and confirm</p>
+        <form action=do_confirmation method=post>
+        {% csrf_token %}
+        <input type="hidden" value={{ room.id }} name="room"/>
+        <input type="hidden" value={{ check_in|date:"m.d.Y" }} name="check_in"/>
+        <input type="hidden" value={{ check_out|date:"m.d.Y" }} name="check_out"/>
+        <input type=submit value="Confirm Booking"/>
+        </form>
+    {% else %}
+        <p><a href=sign_in>Sign in</a> to make a reservation!</p>
+        <p>or</p>
+        <a href=sign_up>Create a new account</a>
+    {% endif %}
+    <form action=list_of_result method=post>
+        {% csrf_token %}
+        {{ search_form.city.as_hidden }}
+        {{ search_form.type.as_hidden }}
+        {{ search_form.check_in_date.as_hidden }}
+        {{ search_form.check_out_date.as_hidden }}
+        <input type=submit value="< Back to the Search" style="text-decoration: underline; background-color: rgba(255,0,0,0); color: cornflowerblue; border-style:none;"/>
+    </form>
+</div>
+
 <!-- <a href="{{ request.META.HTTP_REFERER }}">Back to the Search</a> -->
 {% endblock %}

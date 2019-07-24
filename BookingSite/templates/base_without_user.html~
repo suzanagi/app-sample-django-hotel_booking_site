@@ -1,5 +1,5 @@
 {% extends "base.html" %}
 
 {% block current_user %}
-    <a href=sign_in>Sign in</p>
+    <a href=sign_in>Sign in</a>
 {% endblock %}

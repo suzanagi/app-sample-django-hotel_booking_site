@@ -33,7 +33,7 @@ def search_room(search_check_in, search_check_out, search_type, search_city):
     while True:
         booked_rooms = Reservation.objects.filter(date=search_check_in).values_list('room')
         room_list = room_list.exclude(id__in=booked_rooms)
-        # print("In the search_room() function: booked rooms on {} excluded from the search result".format(search_check_in))
+
         search_check_in += timedelta(days=1)
         if search_check_in == search_check_out:
             break
@@ -143,7 +143,6 @@ def do_confirmation(request):
         price = 0
         
         for id in books:
-            print("At do_confirmation(): in for loop, looking at id: {}".format(id))
             price += Reservation.objects.get(id=id).room.price
         
         return render(request, 'result.html', {'user': user, 'hotel': room.hotel, 'city': room.hotel.city, 'type': dict(ROOM_TYPES).get(room.type), 'price': price, 'check_in': check_in_date, 'check_out': check_out_date, 'proceed': True, 'extend_template': template_for_extends(user)})

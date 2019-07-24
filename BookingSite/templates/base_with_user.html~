@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
 {% block current_user %}
-    <p>User: {{user.f_name}} {{user.l_name}}</p>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="https://img.icons8.com/material/24/000000/user-male-circle.png"></i> {{user.f_name}} {{user.l_name}}</a>
+    <div class="dropdown-menu">
+      <a href=do_sign_out class="dro-down-item">Sign Out</a>
+    </div>
+</li>
 {% endblock %}
